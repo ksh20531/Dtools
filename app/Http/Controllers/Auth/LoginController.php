@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
 class LoginController extends Controller
 {
     /*
@@ -36,5 +40,23 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function login(Request $request){
+        $input_email = $request->get('email');
+        $input_password = $request->get('password');
+
+        $user = User::where('email',$input_email)->first();
+
+        if(!empty($user) && $input_email = $user->email){
+            if(Hash::check($input_password, $user->password)){
+                \Auth::login($user);
+                return redirect('/');
+            }else{
+                return redirect('login')->with('error', 'Password is wrong.');
+            }
+        }else{
+            return redirect('login')->with('error', 'User does not exist.');
+        }
     }
 }
