@@ -69,7 +69,7 @@ class DashboardController extends Controller
                 'dashboard' => $dashboard
             ]);
         }else{
-            \Log::info("else");
+            \Log::info("new post");
             return view('dashboard.dashboard',[
                 'type' => 'create',
                 'id' => $id
@@ -101,7 +101,7 @@ class DashboardController extends Controller
             }
             $dashboard->title = $title;
             $dashboard->content = $content;
-            $dashboard->user_id = 1;
+            $dashboard->user_id = \Auth::user()->id;
             $dashboard->save();
 
             $return_id = $dashboard->id;

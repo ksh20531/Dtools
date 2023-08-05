@@ -7,6 +7,9 @@
 		height: 80vh;
 		vertical-align: top;
 	}
+	#btn-delete{
+		display: none;
+	}
 </style>
 @endsection
 
@@ -15,20 +18,18 @@
 	<input id="title" type="text" style="width: 100%;" value="@if($type == 'modify'){{ $dashboard->title }}@endif">
 </div>
 <div class="content-area">
-	<input id="content" type="text" value="@if($type == 'modify'){{ $dashboard->content }}@endif">
+	<textarea id="content">@if($type == 'modify'){{ $dashboard->content }}@endif</textarea>
 </div>
 <div class="btn-area">
-	@if($id != 0)
-	<button class="btn btn-danger btn-sm" onclick="deletePost()">삭제</button>
-	@endif
-	<button class="btn btn-primary btn-sm" onclick="submitPost()">확인</button>
+	<button class="btn btn-danger btn-sm" id="btn-delete" onclick="deletePost()">삭제</button>
+	<button class="btn btn-primary btn-sm" id="btn-submit" onclick="submitPost()">확인</button>
 </div>
 @endsection
 
 @section('script')
 <script type="text/javascript">
 	$(function(){
-
+		authCheck();
 	});
 
 	function submitPost(url = "/dashboard/"+{{ $id }}+"/edit"){
@@ -96,7 +97,14 @@
 	}
 
 	function authCheck(){
-		
+		console.log("authCheck");
+		@if(!empty($dashboard) && $dashboard->user_id != auth()->id())
+		$("#title").attr('readonly', true);
+		$("#content").attr('readonly', true);
+		$("#btn-submit").attr('disabled', true);
+		@elseif(!empty($dashboard) && $dashboard->user_id == auth()->id())
+		$("#btn-delete").show();
+		@endif
 	}
 </script>
 @endsection
