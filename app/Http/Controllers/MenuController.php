@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Menu;
 
 class MenuController extends Controller
 {
@@ -13,7 +14,24 @@ class MenuController extends Controller
      */
     public function index()
     {
+        \Log::info("MenuController::index");
         return view('menu.index');
+    }
+
+    public function list()
+    {
+        \Log::info("MenuController::list");
+        try{
+            $menus = Menu::where('deleted',0)
+                        ->orderBy('id','desc')
+                        ->paginate(10);
+        }catch(Exception $e){
+            
+        }
+
+        return view('menu.list',[
+            'menus' => $menus
+        ]); 
     }
 
     /**
