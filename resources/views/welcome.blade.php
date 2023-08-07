@@ -25,7 +25,14 @@
             @if (Route::has('login'))
                 <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
                     @auth
-                        <a href="{{ url('/home') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Home</a>
+                        <a class="text-sm text-gray-700 dark:text-gray-500 underline" href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                                         document.getElementById('logout-form').submit();">
+                            {{ __('Logout') }}
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     @else
                         <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
 
@@ -38,7 +45,11 @@
 
             <div>
                 <h1>Welcome, DTools</h1>
+                @auth
+                <a href="/menu">click me</a>
+                @else
                 <div>Please sign in before use</div>
+                @endif
             </div>
         </div>
     </body>
