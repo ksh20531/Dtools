@@ -30,7 +30,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/menu';
+    protected $redirectTo = '/menu'; 
 
     /**
      * Create a new controller instance.
@@ -51,7 +51,7 @@ class LoginController extends Controller
         if(!empty($user) && $input_email = $user->email){
             if(Hash::check($input_password, $user->password)){
                 \Auth::login($user);
-                return redirect('/');
+                return redirect('/menu');
             }else{
                 return redirect('login')->with('error', 'Password is wrong.');
             }

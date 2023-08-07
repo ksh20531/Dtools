@@ -24,7 +24,7 @@ class MenuController extends Controller
 
         try{
             $menus = Menu::where('deleted',0)
-                        ->orderBy('id','desc')
+                        ->orderBy('id','asc')
                         ->paginate(10);
         }catch(Exception $e){
             
