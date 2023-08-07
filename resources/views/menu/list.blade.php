@@ -12,6 +12,7 @@
 	@foreach($menus as $menu)
 	<tr>
 		<td width="50px">{{ $menu->id }}</td>
+
 		<td class="tool" onclick="openTool('{{ $menu->url }}')">{{ $menu->title }}</td>
 	</tr>
 	@endforeach
@@ -22,4 +23,3 @@
 	function openTool(url){
 		window.open(url);
 	}
-</script>

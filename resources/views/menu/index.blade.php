@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('style')
 <style type="text/css">
 </style>
@@ -15,16 +16,14 @@
 	});
 
 	function getMenu(url = "/getMenu"){
-		console.log("getMenu");
 		$.ajax({    
-			type : 'get',    
+			type : 'get',
 			url : url,
 			data : {},    
 			success : function(result) {
-				$("#menu-list").html(result);
+				$('#menu-list').html(result);
 				$(".pagination").unbind('click').on('click','.page-item a', function(e){
 					var url = $(this).attr('href');
-					console.log(url);
 					e.preventDefault();
 					getMenu(url);
 				});

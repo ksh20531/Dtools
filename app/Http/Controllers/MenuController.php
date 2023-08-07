@@ -21,11 +21,19 @@ class MenuController extends Controller
     public function list()
     {
         \Log::info("MenuController::list");
-        $menus = Menu::where('deleted',0)->paginate(10);
+
+        try{
+            $menus = Menu::where('deleted',0)
+                        ->orderBy('id','desc')
+                        ->paginate(10);
+        }catch(Exception $e){
+            
+        }
 
         return view('menu.list',[
-            'menus' => $menus,
-        ]);
+            'menus' => $menus
+        ]); 
+
     }
 
     /**

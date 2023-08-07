@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\DashboardController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,5 +23,9 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::resource('/dashboard', DashboardController::class);
+Route::get('/getDashboard', [App\Http\Controllers\DashboardController::class, 'list']);
+
 Route::resource('/menu', MenuController::class);
 Route::get('/getMenu', [App\Http\Controllers\MenuController::class, 'list']);
+
