@@ -16,7 +16,7 @@ use App\Http\Controllers\DashboardController;
 */
 
 Route::get('/', function () {
-    return view('menu.index');
+    return view('welcome');
 });
 
 Auth::routes();
