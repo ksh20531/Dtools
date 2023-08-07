@@ -28,4 +28,3 @@ Route::get('/getDashboard', [App\Http\Controllers\DashboardController::class, 'l
 
 Route::resource('/menu', MenuController::class);
 Route::get('/getMenu', [App\Http\Controllers\MenuController::class, 'list']);
-
