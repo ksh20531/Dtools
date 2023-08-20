@@ -298,11 +298,4 @@ class BusController extends Controller
         ];
 
     }
-
-    public function test(Request $request)
-    {
-        \Log::info("test");
-
-    }
-
 }
