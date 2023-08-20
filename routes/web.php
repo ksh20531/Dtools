@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Buscontroller;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +29,9 @@ Route::get('/getDashboard', [App\Http\Controllers\DashboardController::class, 'l
 
 Route::resource('/menu', MenuController::class);
 Route::get('/getMenu', [App\Http\Controllers\MenuController::class, 'list']);
+
+Route::resource('/bus', Buscontroller::class);
+Route::get('/searchBus', [App\Http\Controllers\Buscontroller::class, 'searchBus']);
+Route::get('/selectBus', [App\Http\Controllers\Buscontroller::class, 'selectBus']);
+Route::get('/selectStation', [App\Http\Controllers\Buscontroller::class, 'selectStation']);
+Route::get('/test', [App\Http\Controllers\Buscontroller::class, 'test']);
