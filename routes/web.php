@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Buscontroller;
+use App\Http\Controllers\AlarmController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +35,6 @@ Route::resource('/bus', Buscontroller::class);
 Route::get('/searchBus', [App\Http\Controllers\Buscontroller::class, 'searchBus']);
 Route::get('/selectBus', [App\Http\Controllers\Buscontroller::class, 'selectBus']);
 Route::get('/selectStation', [App\Http\Controllers\Buscontroller::class, 'selectStation']);
-Route::get('/test', [App\Http\Controllers\Buscontroller::class, 'test']);
+
+Route::resource('/alarm', AlarmController::class);
+Route::get('/getRoutine', [App\Http\Controllers\AlarmController::class, 'getRoutine']);
