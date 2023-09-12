@@ -22,7 +22,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
 
+    <style type="text/css">
+        .clock{
+            width: 370px;
+/*            color:gray;*/
+            margin:0;
+        }
+    </style>
     @yield('style')
+    
 </head>
 <body>
     <div id="app">
@@ -40,6 +48,8 @@
                     <ul class="navbar-nav me-auto">
 
                     </ul>
+
+                    <h2 class="clock" id="clock"></h2>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
@@ -87,8 +97,28 @@
 
     <script type="text/javascript">
         $(function(){
-
+            clock();
+            setInterval(clock, 1000);
         });
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        function clock() {
+            var date = new Date();
+            var month = date.getMonth()+1;
+            var clockDate = date.getDate();
+            var day = date.getDay();
+            var week = ['일', '월', '화', '수', '목', '금', '토'];
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var seconds = date.getSeconds();
+
+            document.getElementById("clock").innerHTML = `${month}월 ${clockDate}일 ${week[day]}요일` + ` ${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes }`  : minutes }:${seconds < 10 ? `0${seconds }`  : seconds }`;
+        }
     </script>
     @yield('script')
 </body>
