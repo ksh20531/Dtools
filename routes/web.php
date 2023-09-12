@@ -36,5 +36,5 @@ Route::get('/searchBus', [App\Http\Controllers\Buscontroller::class, 'searchBus'
 Route::get('/selectBus', [App\Http\Controllers\Buscontroller::class, 'selectBus']);
 Route::get('/selectStation', [App\Http\Controllers\Buscontroller::class, 'selectStation']);
 
-Route::resource('/alarm', AlarmController::class);
+Route::resource('/alarm', AlarmController::class)->middleware('auth');
 Route::get('/getRoutine', [App\Http\Controllers\AlarmController::class, 'getRoutine']);
