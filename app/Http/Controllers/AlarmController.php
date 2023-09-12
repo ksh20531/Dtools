@@ -32,6 +32,7 @@ class AlarmController extends Controller
                                 'alarms.title as alarm_title',
                             )
                             ->where('routines.deleted',0)
+                            ->where('alarms.deleted',0)
                             ->where('user_id',1)
                             ->orderBy('routines.id','desc')
                             ->orderBy('alarms.day','asc')
@@ -190,17 +191,34 @@ class AlarmController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         \Log::info("AlarmController::destroy ".$id);
-        try{
-            $routine = Routine::find($id);
-            $routine->deleted = 1;
-            $routine->save();
 
-            return "success";
-        }catch(Exception $e){
-            return 'fail';
+        $type = $request->get('type');
+
+        if($type == 'routine'){
+            try{
+                $routine = Routine::find($id);
+                $routine->deleted = 1;
+                $routine->save();
+
+                return 'success';
+            }catch(Exception $e){
+                return 'fail';
+            }
+
+        }else if($type == 'alarm'){
+            try{
+                $alarm = Alarm::find($id);
+                $alarm->deleted = 1;
+                $alarm->save();
+
+                return 'success';
+            }catch(Exception $e){
+                return 'fail';
+            }
         }
+
     }
 }

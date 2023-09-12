@@ -13,8 +13,6 @@
 <div class="routine">
 	<div class="routine-header">
 		<input class="routine-title" value="{{ $routine[0]->title }}" disabled="true">
-		{{-- <div class="routine-title" style="display: inline-block;">{{ $routine[0]->title }}</div> --}}
-		{{-- <button class="btn btn-danger btn-sm btn-deleteRoutine" >&times</button> --}}
 	</div>
 	<div class="routine-body">
 		<div class="alarm-area">
@@ -61,7 +59,13 @@
     });
 
 	function openModal(elem,routine_id,alarm_id){
-		$(".modal").find('.modal-title').wrap( '<input class="modal-title-input" id="modal-title-input" placeholder="Title">' );
+		if(alarm_id != 0){
+			console.log(alarm_id);
+			$(".modal").find('.modal-header').append('<button class="btn btn-danger btn-sm alarm-delete" onclick="deleteAlarm('+alarm_id+')">삭제</button>');
+		}
+		else
+			console.log('0')
+		$(".modal").find('.modal-title').wrap('<input class="modal-title-input" id="modal-title-input" placeholder="Title">');
 		$(".modal").find('.alarm-day').removeClass('alarm-day-selected');
 
 		if(alarm_id == undefined)
@@ -74,7 +78,6 @@
 			url : url,
 			data : {},    
 			success : function(result) {
-				console.log(result);
 				if(result != ''){
 					$(".modal").find(".alarm-day").each(function(index,day){
 						if($(day).data('value') == result.day){
@@ -236,6 +239,31 @@
 				}
 			});
     	}
+    }
 
+    function deleteAlarm(alarm_id){
+    	var url = 'alarm/'+alarm_id;
+    	var ajax_data = {
+			'type': 'alarm',
+			'alarm_id': alarm_id,
+		};
+
+    	$.ajax({    
+			type : 'delete',
+			url : url,
+			data : ajax_data,    
+			success : function(result) {				
+				if(result == 'success'){
+					closeModal();
+					getRoutine();
+				}
+				else{
+					alert('오류 발생');
+				}
+			},    
+			error : function(request, status, error) {
+				console.log(error)    
+			}
+		});
     }
 </script>

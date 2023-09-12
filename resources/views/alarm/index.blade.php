@@ -29,7 +29,6 @@
 	}
 	.alarm-area{
 		display: inline-block;
-/*		border: 1px solid black;*/
 		width: calc(100% - 100px);
 		overflow-x: scroll;
 		white-space: nowrap;
@@ -176,12 +175,14 @@
     }
 
     function closeModal(){
+    	var modalDelete = $(".alarm-delete");
     	var modalTitle = $(".modal-title-input");
     	var modalCheckBox = $(".day-checkbox");
     	var modalDate = $(".alarm-day");
     	var modalHour = $(".alarm-hour");
     	var modalMinute = $(".alarm-minute");
     	
+    	$(modalDelete).remove();
     	$(modalTitle).val(null);
     	$(modalDate).removeClass('alarm-day-selected');
     	$(modalCheckBox).attr("checked",false);
