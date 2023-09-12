@@ -9,6 +9,10 @@ use Auth;
 
 class AlarmController extends Controller
 {
+    public function __construct() 
+    {
+      $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +23,8 @@ class AlarmController extends Controller
         return view('alarm.index');
     }
 
-    public function getRoutine(){
+    public function getRoutine()
+    {
         \Log::info("AlarmController::getAlarm");
 
         $routines = Alarm::rightJoin('routines',function($q){
@@ -33,14 +38,14 @@ class AlarmController extends Controller
                             )
                             ->where('routines.deleted',0)
                             ->where('alarms.deleted',0)
-                            ->where('user_id',1)
+                            ->where('user_id',Auth::user()->id)
                             ->orderBy('routines.id','desc')
                             ->orderBy('alarms.day','asc')
                             ->orderBy('alarms.hour','asc')
                             ->orderBy('alarms.minute','asc')
                             ->get()
                             ->groupBy('id');
-        
+
         $today = date('w');
 
         $alarms = Alarm::where('deleted',0)
@@ -77,7 +82,7 @@ class AlarmController extends Controller
         if($type == 'routine'){
             try{
                 $routine = new Routine;
-                $routine->user_id = 1;
+                $routine->user_id = Auth::user()->id;
                 $routine->title = $request->get('title');
                 $routine->save();
 
