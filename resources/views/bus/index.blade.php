@@ -32,9 +32,11 @@
 		margin: 6px 0px 0px 5px;
 	}
 	.bus-list-area{
-		height: calc(80vh - 50px);
+		height: calc(80vh - 100px);
 		width: 100%;
-		margin: 0px 0px 0px 5px;
+		padding: 0px 0px 0px 5px;
+		margin: 0px 0px 0px 0px;
+		overflow: scroll !important;
 	}
 	.route-list-area{
 		height: 80vh;
@@ -77,7 +79,7 @@
 		})
 	});
 
-	function searchBus(url = "/searchBus"){
+	function searchBus(url = "api/searchBus"){
 		$('.bus-list-area').empty();
 
 		var busId = $(".search").val();
@@ -89,9 +91,11 @@
 			type : 'get',
 			url : url,
 			data : ajax_data,    
-			success : function(result) {				
-				result.forEach (function (bus, idx){
-					$('.bus-list-area').append("<div class='bus-list-item' onclick='selectBus("+busId+","+bus[1]+")'>"+bus[1]+"</div>");
+			success : function(result) {
+				console.log(typeof(result));
+				result.itemList.forEach (function (bus, idx){
+					var plainNo = bus.plainNo.slice(-4,bus.plainNo.length);
+					$('.bus-list-area').append("<div class='bus-list-item' onclick='selectBus("+busId+","+plainNo+")'>"+plainNo+" -> "+bus.stationNm+"</div>");
 				});
 			},    
 			error : function(request, status, error) {
@@ -103,9 +107,9 @@
 	function selectBus(busRouteId,selectedBusRouteId){
 		$('.route-list-area').empty();
 
-		var url = "/selectBus";
+		var url = "api/selectBus";
 		ajax_data = {
-			busId: busRouteId,
+			busRouteId: busRouteId,
 			selectedBusRouteId: selectedBusRouteId,
 		};
 
@@ -114,11 +118,8 @@
 			url : url,
 			data : ajax_data,    
 			success : function(result) {
-				var routeList = result['routeList'];
-				// var selectedBusRouteId = result['selectedBusRouteId'];
-
-				routeList.forEach (function (route, idx){
-					$('.route-list-area').append("<div class='route-list-item' onclick='selectStation("+route[0]+","+route[2]+","+route[3]+","+selectedBusRouteId+")'>"+route[1]+"</div>");
+				result.itemList.forEach (function (route, idx){
+					$('.route-list-area').append("<div class='route-list-item' onclick='selectStation("+route.station+","+route.seq+","+route.busRouteId+","+selectedBusRouteId+")'>"+route.stationNm+"</div>");
 				});
 			},    
 			error : function(request, status, error) {
@@ -127,19 +128,18 @@
 		});
 	}
 
-
-	function selectStation(stationId,ord,busRouteId,selectedBusRouteId){
+	function selectStation(stationId,ord,busRouteId,selectedBusNumber){
 		console.log("selectStation");
 
 		var timer = 15;
 
-		var url = "/selectStation";
+		var url = "api/selectStation";
 		ajax_data = {
 			busId: $(".search").val(),
 			stationId: stationId,
 			ord: ord,
 			busRouteId: busRouteId,
-			selectedBusRouteId: selectedBusRouteId,
+			selectedBusNumber: selectedBusNumber,
 		};
 
 		var ajaxCall = function(){
@@ -152,10 +152,13 @@
 					console.log(result);
 					var stationNm = result['stationNm'];
 					var arrMsg = result['arrMsg'];
-					// var leftStations = result['leftStations'];
-					$('.info-area').html('선택한 버스 : '+selectedBusRouteId+" / 선택한 정류장 : "+stationNm+"<br>도착 정보 : "+arrMsg);
+					var leftStations = result['leftStations'];
+					if(arrMsg == null || arrMsg == '')
+						$('.info-area').html('선택한 버스 : '+selectedBusNumber+" / 선택한 정류장 : "+stationNm+"<br>도착 정보 : "+leftStations+" 정거장 전");
+					else
+						$('.info-area').html('선택한 버스 : '+selectedBusNumber+" / 선택한 정류장 : "+stationNm+"<br>도착 정보 : "+arrMsg);
 					if(result['arrMsg'].indexOf('도착') > -1){
-						//ringing, web push
+						//ringing, need web push
 						var audio = new Audio("{{ asset('alarm_1.mp3') }}");
 						audio.volume = 0.1;
 						audio.play();
@@ -168,7 +171,13 @@
 		};
 		
 		ajaxCall();
-		setInterval(ajaxCall,timer * 1000);
+		// setInterval(ajaxCall,timer * 1000);
+	}
+
+	// bookmark
+
+	function openModal(){
+
 	}
 
 </script>

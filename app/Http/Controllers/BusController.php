@@ -113,15 +113,13 @@ class BusController extends Controller
 
     public function selectStation(Request $request)
     {
-        \Log::info("BusController::selectStation");
+        \Log::info("BusController::selectStation : ".$request->collect());
 
         $busId = $request->get('busId');
         $stationId = $request->get('stationId');
         $ord = $request->get('ord');
         $busRouteId = $request->get('busRouteId');
         $selectedBusRouteId = $request->get('selectedBusRouteId');
-        \Log::info($busId);
-        \Log::info($selectedBusRouteId);
 
 
         // selectedBus의 현제 seq 값을 받아와야 함.

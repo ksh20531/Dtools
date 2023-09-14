@@ -34,4 +34,3 @@ Route::resource('/bus', Buscontroller::class);
 Route::get('/searchBus', [App\Http\Controllers\Buscontroller::class, 'searchBus']);
 Route::get('/selectBus', [App\Http\Controllers\Buscontroller::class, 'selectBus']);
 Route::get('/selectStation', [App\Http\Controllers\Buscontroller::class, 'selectStation']);
-Route::get('/test', [App\Http\Controllers\Buscontroller::class, 'test']);
