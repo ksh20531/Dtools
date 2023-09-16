@@ -3,16 +3,39 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Bus;
+use Auth;
 
 class BusApiController extends Controller
 {
     public function searchBus(Request $request)
     {
-        \Log::info("BusApiController::searchBus : ".$request->get('busId'));
+        $busStr = $request->get('busStr');
+        $busList = $this->getBusRouteId($busStr);
+        $user_id = $request->get('user_id');
 
-        $busId = $request->get('busId');
-        $busList = $this->getBusPosByRtidList($this->getBusRouteId($busId));
-        $routeList = $this->getStaionsByRouteList($this->getBusRouteId($busId));
+        $bus = Bus::where('user_id',$user_id)
+                ->get();
+        
+        foreach($busList->itemList as $item){
+            $item->is_marked = 0;
+            foreach($bus as $b){
+                if($item->busRouteNm == $b->bus_route_name)
+                    $item->is_marked = $b->is_marked;
+            }
+        }
+
+        if(count($busList->itemList) == 1)
+            $busList->itemList->busCount = 1;
+
+        return response()->json($busList);
+    }
+
+    public function getBus(Request $request)
+    {
+        $busRouteId = $request->get('busRouteId');
+        $busList = $this->getBusPosByRtidList($busRouteId);
+        $routeList = $this->getStaionsByRouteList($busRouteId);
 
         foreach($busList->itemList as $bus){
             foreach($routeList->itemList as $route){
@@ -21,15 +44,16 @@ class BusApiController extends Controller
             }
         }
 
+        if(count($busList->itemList) == 1)
+            $busList->itemList->busCount = 1;
+
         return response()->json($busList);
     }
 
     public function selectBus(Request $request)
-    {
-        \Log::info("BusApiController::selectBus : ".$request->get('busRouteId'));
-        
+    {    
         $busRouteId = $request->get('busRouteId');
-        $routeList = $this->getStaionsByRouteList($this->getBusRouteId($busRouteId));
+        $routeList = $this->getStaionsByRouteList($busRouteId);
 
         return response()->json($routeList);
     }
@@ -37,20 +61,20 @@ class BusApiController extends Controller
     public function selectStation(Request $request)
     {
         \Log::info("BusApiController::selectStation : ".$request->collect());
-
-        $busId = $request->get('busId');
+        $busStr = $request->get('busStr');
         $stationId = $request->get('stationId');
         $ord = $request->get('ord');
         $busRouteId = $request->get('busRouteId');
         $selectedBusNumber = $request->get('selectedBusNumber');
 
-        $busList = $this->getBusPosByRtidList($this->getBusRouteId($busId));
+        $busList = $this->getBusPosByRtidList($busRouteId);
 
         $selectedBusOrd = 0;
         foreach($busList->itemList as $bus)
         {
-            if(strpos($bus->plainNo,$selectedBusNumber))
+            if(strpos($bus->plainNo,$selectedBusNumber)){
                 $selectedBusOrd = $bus->sectOrd;
+            }
         }
 
         $busInfo = $this->getArrInfoByRouteList($stationId,$ord,$busRouteId,$selectedBusNumber);
@@ -93,12 +117,74 @@ class BusApiController extends Controller
         ];
     }
 
-    public function getBusRouteId($busId)
+    public function getBookMark(Request $request)
+    {
+        $user_id = $request->get('user_id');
+
+        $bus = Bus::where('user_id',$user_id)
+                    ->where('is_marked',1)
+                    ->get();
+
+        return $bus;
+    }
+
+    public function bookMark(Request $request)
+    {
+        $busRouteId = $request->get('busRouteId');
+        $busStr = $request->get('busRouteNm');
+        $user_id = $request->get('user_id');
+        $is_marked = $request->get('is_marked');
+
+        try{
+            $bus = Bus::where('bus_route_id',$busRouteId)
+                    ->where('bus_route_name',$busStr)
+                    ->where('user_id',$user_id)
+                    ->first();
+
+            if(empty($bus)){
+                $bus = new Bus;
+                $bus->bus_route_id = $busRouteId;
+                $bus->bus_route_name = $busStr;
+                $bus->user_id = $user_id;
+                $bus->is_marked = $is_marked;
+                $bus->save();
+            }else{
+                $bus->bus_route_id = $busRouteId;
+                $bus->bus_route_name = $busStr;
+                $bus->user_id = $user_id;
+                $bus->is_marked = $is_marked;
+                $bus->save();
+            }
+
+            return 'success';
+        }catch(Exception $e){
+            return 'fail';
+        }
+    }
+
+    public function deleteBookMark(Request $request)
+    {
+        $busRouteId = $request->get('busRouteId');
+        $busStr = $request->get('busRouteNm');
+        $user_id = $request->get('user_id');
+
+        $bus = Bus::where('bus_route_id',$busRouteId)
+                    ->where('bus_route_name',$busStr)
+                    ->where('user_id',$user_id)
+                    ->first();
+
+        $bus->is_marked = 0;
+        $bus->save();
+
+        return 'success';
+    }
+
+    public function getBusRouteId($busStr)
     {
         $ch = curl_init();
         $url = 'http://ws.bus.go.kr/api/rest/busRouteInfo/getBusRouteList'; /*URL*/
         $queryParams = '?' . urlencode('serviceKey') . "=". env('OPEN_API_BUS_ENCODING_KEY'); /*Service Key*/
-        $queryParams .= '&' . urlencode('strSrch') . '=' . $busId; /**/
+        $queryParams .= '&' . urlencode('strSrch') . '=' . $busStr; /**/
 
         curl_setopt($ch, CURLOPT_URL, $url . $queryParams);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -108,9 +194,9 @@ class BusApiController extends Controller
         curl_close($ch);
 
         $xml = simplexml_load_string($response);
-        $busRouteId = $xml->msgBody->itemList->busRouteId;
+        $busList = $xml->msgBody;
 
-        return $busRouteId;
+        return $busList;
     }
 
     public function getBusPosByRtidList($busRouteId)

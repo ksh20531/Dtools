@@ -23,3 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/searchBus', [App\Http\Controllers\BusApiController::class, 'searchBus']);
 Route::get('/selectBus', [App\Http\Controllers\BusApiController::class, 'selectBus']);
 Route::get('/selectStation', [App\Http\Controllers\BusApiController::class, 'selectStation']);
+Route::get('/getBus', [App\Http\Controllers\BusApiController::class, 'getBus']);
+Route::get('/getBookMark', [App\Http\Controllers\BusApiController::class, 'getBookMark']);
+Route::put('/bookMark', [App\Http\Controllers\BusApiController::class, 'bookMark']);
+Route::delete('/deleteBookMark', [App\Http\Controllers\BusApiController::class, 'deleteBookMark']);

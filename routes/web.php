@@ -31,7 +31,7 @@ Route::get('/getDashboard', [App\Http\Controllers\DashboardController::class, 'l
 Route::resource('/menu', MenuController::class);
 Route::get('/getMenu', [App\Http\Controllers\MenuController::class, 'list']);
 
-Route::resource('/bus', Buscontroller::class);
+Route::resource('/bus', Buscontroller::class)->middleware('auth');;
 Route::get('/searchBus', [App\Http\Controllers\Buscontroller::class, 'searchBus']);
 Route::get('/selectBus', [App\Http\Controllers\Buscontroller::class, 'selectBus']);
 Route::get('/selectStation', [App\Http\Controllers\Buscontroller::class, 'selectStation']);
