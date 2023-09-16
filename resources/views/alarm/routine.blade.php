@@ -172,7 +172,8 @@
 	function deleteRoutine(routine_id){
     	var url = 'alarm/'+routine_id;
 		var ajax_data = {
-			'routine_id': routine_id,
+			type : 'routine',
+			'routine_id' : routine_id,
 		};
 
 		$.ajax({    
