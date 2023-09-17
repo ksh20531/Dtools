@@ -21,8 +21,6 @@ class AlarmController extends Controller
 
     public function getRoutine()
     {
-        \Log::info("AlarmController::getAlarm");
-
         $routines = Alarm::rightJoin('routines',function($q){
                                 $q->on('alarms.routine_id','=','routines.id')
                                     ->where('routines.deleted',0);
@@ -33,7 +31,6 @@ class AlarmController extends Controller
                                 'alarms.title as alarm_title',
                             )
                             ->where('routines.deleted',0)
-                            ->where('alarms.deleted',0)
                             ->where('user_id',Auth::user()->id)
                             ->orderBy('routines.id','desc')
                             ->orderBy('alarms.day','asc')
@@ -71,8 +68,6 @@ class AlarmController extends Controller
      */
     public function create(Request $request)
     {
-        \Log::info("AlarmController::create");
-
         $type = $request->get('type');
 
         if($type == 'routine'){
@@ -123,8 +118,6 @@ class AlarmController extends Controller
      */
     public function show(Request $request,$id)
     {
-        \Log::info("AlarmController::show ".$id);
-
         try{
             $alarm = Alarm::find($id);
 
@@ -154,8 +147,6 @@ class AlarmController extends Controller
      */
     public function update(Request $request, $id)
     {
-        \Log::info("AlarmController::update ".$id);
-
         $type = $request->get('type');
 
         if($type == 'routine'){
@@ -194,8 +185,6 @@ class AlarmController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        \Log::info("AlarmController::destroy ".$id);
-
         $type = $request->get('type');
 
         if($type == 'routine'){

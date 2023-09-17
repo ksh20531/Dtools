@@ -59,12 +59,8 @@
     });
 
 	function openModal(elem,routine_id,alarm_id){
-		if(alarm_id != 0){
-			console.log(alarm_id);
+		if(alarm_id != 0)
 			$(".modal").find('.modal-header').append('<button class="btn btn-danger btn-sm alarm-delete" onclick="deleteAlarm('+alarm_id+')">삭제</button>');
-		}
-		else
-			console.log('0')
 		$(".modal").find('.modal-title').wrap('<input class="modal-title-input" id="modal-title-input" placeholder="Title">');
 		$(".modal").find('.alarm-day').removeClass('alarm-day-selected');
 
@@ -172,7 +168,8 @@
 	function deleteRoutine(routine_id){
     	var url = 'alarm/'+routine_id;
 		var ajax_data = {
-			'routine_id': routine_id,
+			type : 'routine',
+			'routine_id' : routine_id,
 		};
 
 		$.ajax({    
