@@ -1,17 +1,19 @@
 <style type="text/css">
-	/*.row{
-		cursor: pointer;
-	}*/
+	
 </style>
 <table class="table">
 	<tr>
-		<th>id</th>
-		<th>title</th>
+		<th>ID</th>
+		<th>Title</th>
+		<th>User</th>
+		<th>Created at</th>
 	</tr>
 	@foreach($dashboards as $dashboard)
 	<tr class="">
-		<td width="50px">{{ $dashboard->id }}</td>
-		<td style="cursor: pointer;" onclick="openDashboard({{ $dashboard->id }})">{{ $dashboard->title }}</td>
+		<td width="50px">{{ $dashboard->dashboard_id }}</td>
+		<td style="cursor: pointer;" onclick="openDashboard({{ $dashboard->dashboard_id }})">{{ $dashboard->title }}</td>
+		<td width="250px">{{ $dashboard->email }}</td>
+		<td width="250px">{{ $dashboard->dashboard_created_at }}</td>
 	</tr>
 	@endforeach
 </table>

@@ -29,7 +29,7 @@
 	}
 	.alarm-area{
 		display: inline-block;
-		width: calc(100% - 100px);
+		width: calc(100% - 65px);
 		overflow-x: scroll;
 		white-space: nowrap;
 	}
@@ -47,6 +47,7 @@
 		border: 1px solid black;
 		width: 70px;
 		height: 100px;
+		cursor: pointer;
 	}
 	.alarm-day-area{
 		margin-bottom: 1rem;

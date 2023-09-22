@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Buscontroller;
+use App\Http\Controllers\BusController;
 use App\Http\Controllers\AlarmController;
 
 /*
@@ -31,10 +31,10 @@ Route::get('/getDashboard', [App\Http\Controllers\DashboardController::class, 'l
 Route::resource('/menu', MenuController::class);
 Route::get('/getMenu', [App\Http\Controllers\MenuController::class, 'list']);
 
-Route::resource('/bus', Buscontroller::class)->middleware('auth');;
-Route::get('/searchBus', [App\Http\Controllers\Buscontroller::class, 'searchBus']);
-Route::get('/selectBus', [App\Http\Controllers\Buscontroller::class, 'selectBus']);
-Route::get('/selectStation', [App\Http\Controllers\Buscontroller::class, 'selectStation']);
+Route::resource('/bus', BusController::class)->middleware('auth');;
+Route::get('/searchBus', [App\Http\Controllers\BusController::class, 'searchBus']);
+Route::get('/selectBus', [App\Http\Controllers\BusController::class, 'selectBus']);
+Route::get('/selectStation', [App\Http\Controllers\BusController::class, 'selectStation']);
 
 Route::resource('/alarm', AlarmController::class)->middleware('auth');
 Route::get('/getRoutine', [App\Http\Controllers\AlarmController::class, 'getRoutine']);

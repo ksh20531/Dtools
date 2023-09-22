@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Dashboard;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -14,16 +15,21 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        \Log::info("DashboardController::index");
-
         return view('dashboard.index');
     }
 
     public function list()
     {
-        \Log::info("DashboardController::list");
-        $dashboards = Dashboard::where('deleted',0)
+        $dashboards = Dashboard::rightJoin('users','users.id','dashboards.user_id')
+                                ->where('dashboards.deleted',0)
+                                ->select(
+                                    "*",
+                                    "dashboards.id as dashboard_id",
+                                    "dashboards.created_at as dashboard_created_at",
+                                )
+                                ->orderBy('dashboard_created_at','desc')
                                 ->paginate(10);
+
         return view('dashboard.list',[
             'dashboards' => $dashboards,
         ]);
@@ -36,7 +42,7 @@ class DashboardController extends Controller
      */
     public function create()
     {
-        \Log::info("DashboardController::create");
+
     }
 
     /**
@@ -58,8 +64,6 @@ class DashboardController extends Controller
      */
     public function show($id)
     {
-        \Log::info("DashboardController::show ". $id);
-
         if($id != 0){
             $dashboard = Dashboard::find($id);
 
@@ -69,7 +73,6 @@ class DashboardController extends Controller
                 'dashboard' => $dashboard
             ]);
         }else{
-            \Log::info("new post");
             return view('dashboard.dashboard',[
                 'type' => 'create',
                 'id' => $id
@@ -87,7 +90,6 @@ class DashboardController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        \Log::info("DashboardController::edit ". $id);
         $title = $request->get('title');
         $content = $request->get('content');
 
@@ -138,8 +140,6 @@ class DashboardController extends Controller
      */
     public function destroy($id)
     {
-        \Log::info("DashboardController::destroy ". $id);
-
         try{
             $dashboard = Dashboard::find($id);
             $dashboard->deleted = 1;

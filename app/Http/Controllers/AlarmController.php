@@ -30,7 +30,6 @@ class AlarmController extends Controller
                                 'alarms.id as alarm_id',
                                 'alarms.title as alarm_title',
                             )
-                            ->where('routines.deleted',0)
                             ->where('user_id',Auth::user()->id)
                             ->orderBy('routines.id','desc')
                             ->orderBy('alarms.day','asc')
@@ -41,16 +40,21 @@ class AlarmController extends Controller
 
         $today = date('w');
 
-        $alarms = Alarm::where('deleted',0)
-                        ->where('day',$today+1)
+        $alarms = Alarm::rightJoin('routines',function($q){
+                                $q->on('alarms.routine_id','=','routines.id')
+                                    ->where('routines.deleted',0);
+                            })
+                        ->where('alarms.deleted',0)
+                        ->where('day',$today)
+                        ->where('user_id',Auth::user()->id)
+                        ->where('selected',1)
                         ->select(
-                            'id',
-                            'title',
+                            'alarms.id',
+                            'alarms.title',
                             'day',
                             'hour',
                             'minute',
                         )
-                        ->orderBy('alarms.day','asc')
                         ->orderBy('alarms.hour','asc')
                         ->orderBy('alarms.minute','asc')
                         ->get();
@@ -153,6 +157,7 @@ class AlarmController extends Controller
             try{
                 $routine = Routine::find($id);
                 $routine->title = $request->get('title');
+                $routine->selected = $request->get('is_selected');
                 $routine->save();
 
                 return 'success';

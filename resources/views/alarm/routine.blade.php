@@ -8,11 +8,49 @@
 	.btn-deleteRoutine{
 		display: none;
 	}
+	.routine-header{
+		margin: 5px 0px 5px 5px;
+	}
+	.routine-body{
+		margin: 0px 5px 5px 5px;
+	}
+	.btn-alarm{
+		margin: 0px 0px 1px 0px;
+	}
+	.routine-toggle{
+		appearance: none;
+		position: relative;
+		border: max(2px, 0.1em) solid gray;
+		border-radius: 1.25em;
+		width: 2.25em;
+		height: 1.25em;
+		cursor: pointer;
+	}
+	.routine-toggle::before {
+		content: "";
+		position: absolute;
+		left: 0;
+		width: 1em;
+		height: 1em;
+		border-radius: 50%;
+		transform: scale(0.8);
+		background-color: gray;
+		transition: left 250ms linear;
+	}
+	.routine-toggle:checked {
+		background-color: gray;
+		border-color: gray;
+	}
+	.routine-toggle:checked::before {
+		background-color: white;
+		left: 1em;
+	}
 </style>
 @foreach($routines as $routine)
 <div class="routine">
 	<div class="routine-header">
 		<input class="routine-title" value="{{ $routine[0]->title }}" disabled="true">
+		<input class="routine-toggle" type="checkbox" onclick="selectRoutine(this,{{ $routine[0]->id }})" @if($routine[0]->selected == 1)checked="true"@endif>
 	</div>
 	<div class="routine-body">
 		<div class="alarm-area">
@@ -45,9 +83,9 @@
 		@endif
 		</div>
 		<div class="alarm-btn-area">
-			<button class="btn btn-primary btn-sm" onclick="openModal(this,{{ $routine[0]->id }},0)">추가</button>
-			<button class="btn btn-primary btn-sm" onclick="modifyRoutine(this,{{ $routine[0]->id }})">수정</button>
-			<button class="btn btn-danger btn-sm" onclick="deleteRoutine({{ $routine[0]->id }})">삭제</button>
+			<button class="btn btn-primary btn-sm btn-alarm" onclick="openModal(this,{{ $routine[0]->id }},0)">추가</button>
+			<button class="btn btn-primary btn-sm btn-alarm" onclick="modifyRoutine(this,{{ $routine[0]->id }})">수정</button>
+			<button class="btn btn-danger btn-sm btn-alarm" onclick="deleteRoutine({{ $routine[0]->id }})">삭제</button>
 		</div>
 	</div>
 </div>
@@ -262,5 +300,38 @@
 				console.log(error)    
 			}
 		});
+    }
+
+    function selectRoutine(elem,routine_id){
+		var url = 'alarm/'+routine_id;
+    	var title = $(elem).parents('.routine').find('.routine-title').val();
+
+    	if($(elem).is(":checked"))
+    		var is_selected = 1;
+    	else
+    		var is_selected = 0;
+
+		var ajax_data = {
+			'type': 'routine',
+			'routine_id': routine_id,
+			'title': title,
+			'is_selected': is_selected,
+		};
+
+		$.ajax({    
+			type : 'put',
+			url : url,
+			data : ajax_data,    
+			success : function(result) {				
+				if(result == 'success')
+					getRoutine();
+				else
+					alert('오류 발생');
+			},    
+			error : function(request, status, error) {
+				console.log(error)    
+			}
+		});
+
     }
 </script>

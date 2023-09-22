@@ -14,14 +14,11 @@ class MenuController extends Controller
      */
     public function index()
     {
-        \Log::info("MenuController::index");
         return view('menu.index');
     }
 
     public function list()
     {
-        \Log::info("MenuController::list");
-
         try{
             $menus = Menu::where('deleted',0)
                         ->orderBy('id','asc')

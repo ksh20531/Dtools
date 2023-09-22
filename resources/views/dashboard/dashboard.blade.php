@@ -10,6 +10,13 @@
 	#btn-delete{
 		display: none;
 	}
+	.title-area{
+		margin: 10px 0px 5px 0px;
+	}
+	.btn-area{
+		margin-top: 5px;
+		text-align: right;
+	}
 </style>
 @endsection
 
@@ -21,8 +28,8 @@
 	<textarea id="content">@if($type == 'modify'){{ $dashboard->content }}@endif</textarea>
 </div>
 <div class="btn-area">
-	<button class="btn btn-danger btn-sm" id="btn-delete" onclick="deletePost()">삭제</button>
 	<button class="btn btn-primary btn-sm" id="btn-submit" onclick="submitPost()">확인</button>
+	<button class="btn btn-danger btn-sm" id="btn-delete" onclick="deletePost()">삭제</button>
 </div>
 @endsection
 

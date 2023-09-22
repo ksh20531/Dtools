@@ -1,10 +1,16 @@
 @extends('layouts.app')
 
 @section('style')
+	<style type="text/css">
+		.dashboard-header{
+			text-align: right;
+			margin: 10px 0px 5px 0px;
+		}
+	</style>
 @endsection
 
 @section('content')
-<div>
+<div class="dashboard-header">
 	<button class="btn btn-primary btn-sm" onclick="createDashboard()">create</button>
 </div>
 <div class="dashboard-list"></div>
@@ -17,11 +23,6 @@
 	});
 
 	function getDashboard(url = "/getDashboard"){
-		console.log('getDashboard');
-		// var ajax_data = {
-		
-		// }
-
 		$.ajax({    
 			type : 'get',
 			url : url,
@@ -30,7 +31,6 @@
 				$('.dashboard-list').html(result);
 				$(".pagination").unbind('click').on('click','.page-item a', function(e){
 					var url = $(this).attr('href');
-					// console.log(url);
 					e.preventDefault();
 					getDashboard(url);
 				});
