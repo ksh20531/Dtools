@@ -97,6 +97,7 @@
 
     <script type="text/javascript">
         $(function(){
+            $('.modal').modal({backdrop: 'static'});
             clock();
             setInterval(clock, 1000);
         });
