@@ -110,7 +110,6 @@
 <script type="text/javascript">
 	$(function(){
 		getBookMark();
-    	$('.modal').modal({backdrop: 'static'});
 		$(".search").keypress(function(e){
 			if(e.keyCode && e.keyCode == 13){
 				searchBus();
