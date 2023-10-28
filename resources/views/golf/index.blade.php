@@ -241,7 +241,7 @@
 						<div class="modal-elem ">${reservation.id}</div>
 						<div class="modal-elem modal-reservation-name">${reservation.field.name}</div>
 						<div class="modal-elem modal-field-id" style="display:none;">${reservation.field.id}</div>
-						<div class="modal-elem"><input class="modal-reserve-time" type="text" value="${reservation.reservation_time}"></div>
+						<div class="modal-elem"><input class="modal-reserve-time" type="text" value="${reservation.reservation_time}" placeholder="${reservation.reservation_time}"></div>
 					</div>`)
 				$('.modal-footer').append(`<button class="btn btn-primary btn-sm" onclick="modifyReservation(${reservation.id})">변경</button>`)
 
