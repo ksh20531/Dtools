@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BusController;
 use App\Http\Controllers\AlarmController;
 use App\Http\Controllers\GolfReservationController;
+use App\Http\Controllers\GolfResultController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,3 +42,4 @@ Route::resource('/alarm', AlarmController::class)->middleware('auth');
 Route::get('/getRoutine', [App\Http\Controllers\AlarmController::class, 'getRoutine']);
 
 Route::resource('/golf', GolfReservationController::class);
+Route::resource('/result', GolfResultController::class);

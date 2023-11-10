@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\GolfField;
 
-class GolfReservationController extends Controller
+class GolfResultController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,11 +13,7 @@ class GolfReservationController extends Controller
      */
     public function index()
     {
-        $fields = GolfField::get();
-
-        return view('golf.index',[
-            'fields' => $fields,
-        ]);
+        return view('result.index');
     }
 
     /**
@@ -50,7 +45,7 @@ class GolfReservationController extends Controller
      */
     public function show($id)
     {
-   
+        //
     }
 
     /**

@@ -11,4 +11,9 @@ class GolfResult extends Model
 
     protected $connection = 'dtools';
     protected $table = 'golf_results';
+
+    public function reservation()
+    {
+        return $this->belongsTo(GolfReservation::class);
+    }
 }

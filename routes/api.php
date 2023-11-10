@@ -37,3 +37,4 @@ Route::prefix('/golfs')->group(function(){
     Route::put('/{golf}', [App\Http\Controllers\GolfApiController::class, 'update']);
     Route::delete('/{golf}', [App\Http\Controllers\GolfApiController::class, 'destroy']);
 });
+Route::get('/results', [App\Http\Controllers\GolfApiController::class, 'getResult']);

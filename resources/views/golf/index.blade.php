@@ -1,4 +1,4 @@
-@extends('layouts.app')
+\@extends('layouts.app')
 
 @section('style')
 <style type="text/css">
@@ -65,6 +65,7 @@
 		<input type="text" class="reserve-time" placeholder="2023-08-10 11:30:00">
 	</div>
 	<button class="btn btn-primary btn-sm info-elem" style="font-size: 20px;" onclick="makeReservation()">예약</button>
+	<button class="btn btn-primary btn-sm info-elem" style="font-size: 20px;" onclick="openResult()">결과</button>
 </div>
 <div class="reservation-list">
 	<table class="table">
@@ -255,6 +256,10 @@
 	function closeModal(){
 		$('.modal-body').empty();
 		$(".modal").modal("hide");
+	}
+
+	function openResult(){
+		window.location = "/result";
 	}
 	
 </script>
