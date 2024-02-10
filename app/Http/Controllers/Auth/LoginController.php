@@ -46,7 +46,11 @@ class LoginController extends Controller
         $input_email = $request->get('email');
         $input_password = $request->get('password');
 
-        $user = User::where('email',$input_email)->first();
+        try{
+            $user = User::where('email',$input_email)->first();
+        }catch(Throwable $e){
+            \Log::info("test");
+        }
 
         if(!empty($user) && $input_email = $user->email){
             if(Hash::check($input_password, $user->password)){

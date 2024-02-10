@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserApiController;
 use App\Http\Controllers\BusApiController;
 use App\Http\Controllers\GolfApiController;
 
@@ -19,6 +20,13 @@ use App\Http\Controllers\GolfApiController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+Route::prefix('/users')->group(function(){
+    Route::get('/', [App\Http\Controllers\UserApiController::class, 'index']);
+    Route::post('/', [App\Http\Controllers\UserApiController::class, 'store']);
+    Route::get('/{user}', [App\Http\Controllers\UserApiController::class, 'show']);
+    Route::put('/{user}', [App\Http\Controllers\UserApiController::class, 'update']);
+    Route::delete('/{user}', [App\Http\Controllers\UserApiController::class, 'destroy']);
 });
 
 Route::get('/searchBus', [App\Http\Controllers\BusApiController::class, 'searchBus']);

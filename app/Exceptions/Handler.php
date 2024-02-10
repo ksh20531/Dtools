@@ -34,6 +34,7 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
+        \Log::info("k");
         $this->reportable(function (Throwable $e) {
             //
         });
